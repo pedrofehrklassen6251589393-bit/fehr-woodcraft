@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fehr Woodcraft</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .sidebar-item.active { background: #ede9fe; color: #7c3aed; font-weight: 600; }
+    .card { background: white; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<div class="flex h-screen overflow-hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-white border-r flex flex-col">
+    <div class="p-5 border-b">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold">◆</div>
+        <div>
+          <div class="font-bold text-lg">Fehr Woodcraft</div>
+          <div class="text-xs text-green-600">● Server:3000</div>
+          <div class="text-xs text-amber-600">● Cloud Live</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="flex-1 p-3 space-y-1">
+      <button onclick="showPage('dashboard')" class="sidebar-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">📊 Dashboard</button>
+      <button onclick="showPage('schedules')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">📅 Client Schedules</button>
+      <button onclick="showPage('invoices')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">📄 Invoices</button>
+      <button onclick="showPage('catalog')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">📦 Item Catalog</button>
+      <button onclick="showPage('expenses')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">💰 Expenses & Budgets</button>
+      <button onclick="showPage('reports')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">📈 Reports</button>
+      <button onclick="showPage('settings')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left">⚙️ Settings & Server</button>
+    </nav>
+
+    <div class="p-4 border-t text-sm">
+      <div class="font-medium">Pedro Fehr</div>
+      <div class="text-gray-500 text-xs">pedro@fehrwoodcraft.com</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="flex-1 overflow-y-auto p-6 md:p-8">
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard">
+      <div class="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold">Overview</h1>
+          <p class="text-gray-500 mt-1">Welcome back, here's what's happening with your business financials.</p>
+        </div>
+        <div class="flex gap-3">
+          <button class="px-4 py-2 border rounded-xl text-sm font-medium">Monthly Report</button>
+          <button class="px-4 py-2 bg-purple-600 text-white rounded-xl text-sm font-medium">+ Add Invoice</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="card p-5">
+          <div class="text-sm text-gray-500">Total Balance</div>
+          <div class="text-2xl font-bold mt-1">$18,050.00</div>
+          <div class="text-sm text-green-600 mt-2">↗ +12.4% from last month</div>
+        </div>
+        <div class="card p-5">
+          <div class="text-sm text-gray-500">Monthly Spending</div>
+          <div class="text-2xl font-bold mt-1">$9,350.00</div>
+          <div class="text-sm text-gray-500 mt-2">Budget: $12,000.00</div>
+        </div>
+        <div class="card p-5">
+          <div class="text-sm text-gray-500">Net Profit</div>
+          <div class="text-2xl font-bold mt-1">$8,700.00</div>
+          <div class="text-sm text-green-600 mt-2">↗ +18.3% margin high</div>
+        </div>
+        <div class="card p-5">
+          <div class="text-sm text-gray-500">Open Invoices</div>
+          <div class="text-2xl font-bold mt-1">$6,300.00</div>
+          <div class="text-sm text-amber-600 mt-2">3 unpaid</div>
+        </div>
+      </div>
+
+      <div class="card p-5 mb-8">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-lg font-bold">Spending & Income Trends</h2>
+            <p class="text-sm text-gray-500">Cash flow movement over time</p>
+          </div>
+        </div>
+        <canvas id="trendsChart" height="120"></canvas>
+      </div>
+
+      <div class="card p-5 mb-8">
+        <div class="flex justify-between items-center mb-5">
+          <h2 class="text-lg font-bold">Monthly Budgets</h2>
+          <button class="text-purple-600 text-sm font-medium">Manage</button>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between text-sm mb-1"><span>Materials & Supplies</span><span>$3,200 / $4,000</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2.5"><div class="bg-blue-500 h-2.5 rounded-full" style="width:80%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1"><span>Subcontractors</span><span>$1,850 / $2,500</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2.5"><div class="bg-green-500 h-2.5 rounded-full" style="width:74%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1"><span>Software & Tools</span><span>$820 / $1,000</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2.5"><div class="bg-orange-400 h-2.5 rounded-full" style="width:82%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1"><span>Office & Equipment</span><span>$1,450 / $1,500</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2.5"><div class="bg-red-400 h-2.5 rounded-full" style="width:97%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-5">
+        <h2 class="text-lg font-bold mb-1">Active Client Projects & 3-Step Schedules</h2>
+        <p class="text-sm text-gray-500 mb-5">Track project start & finish statuses, milestone progress, and client deposits</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="border rounded-2xl p-4">
+            <div class="flex justify-between mb-2">
+              <div class="font-semibold">Custom Walnut Executive Desk</div>
+              <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">In Progress</span>
+            </div>
+            <div class="text-sm text-gray-500 mb-2">Marcus Sterling · Due 2026-10-07</div>
+            <div class="flex gap-1 mb-3">
+              <div class="h-2 flex-1 bg-green-500 rounded"></div>
+              <div class="h-2 flex-1 bg-amber-400 rounded"></div>
+              <div class="h-2 flex-1 bg-gray-200 rounded"></div>
+            </div>
+            <div class="text-sm">Paid: <span class="text-green-600 font-medium">$2,000 (53%)</span> · Total $3,800</div>
+          </div>
+
+          <div class="border rounded-2xl p-4">
+            <div class="flex justify-between mb-2">
+              <div class="font-semibold">Rift White Oak Built-In Pantry</div>
+              <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Not Started</span>
+            </div>
+            <div class="text-sm text-gray-500 mb-2">Eleanor Vance · Due 2026-10-19</div>
+            <div class="flex gap-1 mb-3">
+              <div class="h-2 flex-1 bg-green-500 rounded"></div>
+              <div class="h-2 flex-1 bg-gray-200 rounded"></div>
+              <div class="h-2 flex-1 bg-gray-200 rounded"></div>
+            </div>
+            <div class="text-sm">Paid: <span class="text-green-600 font-medium">$1,500 (33%)</span> · Total $4,600</div>
+          </div>
+
+          <div class="border rounded-2xl p-4">
+            <div class="flex justify-between mb-2">
+              <div class="font-semibold">Reclaimed Heart Pine Farmhouse</div>
+              <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Completed</span>
+            </div>
+            <div class="text-sm text-gray-500 mb-2">David & Clara Miller · Due 2026-09-23</div>
+            <div class="flex gap-1 mb-3">
+              <div class="h-2 flex-1 bg-green-500 rounded"></div>
+              <div class="h-2 flex-1 bg-green-500 rounded"></div>
+              <div class="h-2 flex-1 bg-green-500 rounded"></div>
+            </div>
+            <div class="text-sm">Paid: <span class="text-green-600 font-medium">$3,200 (100%)</span> · Total $3,200</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other pages -->
+    <div id="page-schedules" class="hidden">
+      <h1 class="text-2xl font-bold mb-4">Client Schedules & Project Planner</h1>
+      <p class="text-gray-500">Full version coming in the next update...</p>
+    </div>
+    <div id="page-invoices" class="hidden">
+      <h1 class="text-2xl font-bold mb-4">Invoices</h1>
+      <p class="text-gray-500">Full version coming next...</p>
+    </div>
+    <div id="page-catalog" class="hidden">
+      <h1 class="text-2xl font-bold mb-4">Item Catalog</h1>
+      <p class="text-gray-500">Full version coming next...</p>
+    </div>
+    <div id="page-expenses" class="hidden">
+      <h1 class="text-2xl font-bold mb-4">Expenses & Budgets</h1>
+      <p class="text-gray-500">Full version coming next...</p>
+    </div>
+    <div id="page-reports" class="hidden">
+      <h1 class="text-2xl font-bold mb-4">Financial Reports</h1>
+      <p class="text-gray-500">Full version coming next...</p>
+    </div>
+    <div id="page-settings" class="hidden">
+      <h1 class="text-2xl font-bold mb-4">Settings & Server</h1>
+      <p class="text-gray-500">Full version coming next...</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+  document.getElementById('page-' + id).classList.remove('hidden');
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+const ctx = document.getElementById('trendsChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['May 1','May 5','May 8','May 12','May 15','May 18','May 22','May 26','May 29'],
+    datasets: [{
+      label: 'Income',
+      data: [4000,6500,9000,11000,13000,14500,16000,17500,19000],
+      borderColor: '#7c3aed',
+      backgroundColor: 'rgba(124,58,237,0.1)',
+      fill: true,
+      tension: 0.4
+    },{
+      label: 'Expenses',
+      data: [3000,4200,5000,5800,6500,7200,8000,8500,9000],
+      borderColor: '#94a3b8',
+      tension: 0.4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+</script>
+</body>
+</html>
